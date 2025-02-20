@@ -2,6 +2,8 @@ const fs=require('fs')
 const iconv = require('iconv-lite');
 const https = require("https")
 const baseurl='https://84000.org/tipitaka/read/m_siri.php?';
+
+//const baseurl='https://84000.org/tipitaka/attha/attha.php?';
 const vols={
     //1:60,
 
@@ -36,7 +38,8 @@ function fetch(baseurl,book,siri){
             res.on("data",data=>{
                 const decodedText = iconv.decode(data, 'TIS-620');
 
-                chunks.push(decodedText.replace(/\ufffd/g,'"').replace('CHARSET="tis-620"','CHARSET="utf-8"'))
+                chunks.push(decodedText.replace('CHARSET="tis-620"','CHARSET="utf-8"')
+                .replace(/\ufffd/g,'"'))
             })
             res.on("end",()=>{
                 resolve(chunks.join(''));
